@@ -39,3 +39,6 @@ sanity-studio
 
 # jetbrain - webstorm
 .idea
+
+# vscode
+.vscode
