@@ -1,3 +1,4 @@
+import { addUser } from "@/service/user";
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
@@ -10,6 +11,20 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user: { id, name, email, image } }) {
+      if (!email) {
+        console.error(`email not found.`);
+        return false;
+      }
+      addUser({
+        id,
+        name: name || "",
+        email,
+        image,
+        username: email.split("@")[0],
+      });
+      return true;
+    },
     async session({ session }) {
       const user = session?.user;
       if (user) {
