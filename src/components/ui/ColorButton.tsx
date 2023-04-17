@@ -11,7 +11,7 @@ export default function ColorButton({ text, onClick, size = "small" }: Props) {
       }`}
     >
       <button
-        className={`bg-white rounded-sm text-base p-[0.3rem] hover:opacity-90 transition-opacity ${
+        className={`bg-white rounded-sm hover:opacity-90 transition-opacity ${
           size === "big" ? "p-4 text-2xl" : "p-[0.3rem] text-base"
         }`}
         onClick={onClick}
