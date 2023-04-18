@@ -18,3 +18,7 @@ export type SearchUser = AuthUser & {
   following: number;
   followers: number;
 };
+
+export type ProfileUser = SearchUser & {
+  posts: number;
+};
