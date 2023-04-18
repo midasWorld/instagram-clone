@@ -13,3 +13,8 @@ export type DetailUser = AuthUser & {
   followers: SimpleUser[];
   bookmarks: string[];
 };
+
+export type SearchUser = AuthUser & {
+  following: number;
+  followers: number;
+};
