@@ -117,5 +117,6 @@ export async function addComment(
         comment,
         author: { _ref: userId, _type: "reference" },
       },
-    ]);
+    ])
+    .commit({ autoGenerateArrayKeys: true });
 }

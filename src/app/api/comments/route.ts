@@ -1,14 +1,17 @@
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { addComment } from "@/service/posts";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const user = session?.user;
 
   if (!user) {
     return new Response("Authentication Error", { status: 401 });
   }
+
+  console.log(`user: ${JSON.stringify(user)}`);
 
   const { id, comment } = await req.json();
 

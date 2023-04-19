@@ -10,11 +10,11 @@ import HeartIcon from "./ui/icons/HeartIcon";
 
 type Props = {
   post: SimplePost;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 export default function ActionBar({ post, children }: Props) {
-  const { id, likes, username, text, createdAt } = post;
+  const { id, likes, createdAt } = post;
   const { user, setBookmark } = useMe();
   const { setLike } = usePosts();
 
