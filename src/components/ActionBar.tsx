@@ -1,20 +1,48 @@
-import HeartIcon from "./ui/icons/HeartIcon";
-import BookmarkIcon from "./ui/icons/BookmarkIcon";
+import useMe from "@/hooks/me";
+import usePosts from "@/hooks/posts";
+import { SimplePost } from "@/model/post";
 import { parseDate } from "@/util/date";
+import ToggleButton from "./ui/ToggleButton";
+import BookmarkFillIcon from "./ui/icons/BookmarkFillIcon";
+import BookmarkIcon from "./ui/icons/BookmarkIcon";
+import HeartFillIcon from "./ui/icons/HeartFillIcon";
+import HeartIcon from "./ui/icons/HeartIcon";
 
 type Props = {
-  likes: string[];
-  username: string;
-  text?: string;
-  createdAt: string;
+  post: SimplePost;
 };
 
-export default function ActionBar({ likes, username, text, createdAt }: Props) {
+export default function ActionBar({ post }: Props) {
+  const { id, likes, username, text, createdAt } = post;
+  const { user, setBookmark } = useMe();
+  const { setLike } = usePosts();
+
+  const liked = user ? likes.includes(user.username) : false;
+  const bookmarked = user?.bookmarks.includes(id) ?? false;
+
+  const handleLike = (like: boolean) => {
+    user && setLike(post, user.username, like);
+  };
+
+  const handleBookmark = (bookmark: boolean) => {
+    user && setBookmark(id, bookmark);
+  };
+
   return (
     <>
       <div className="flex justify-between my-2 px-4">
-        <HeartIcon />
-        <BookmarkIcon />
+        <ToggleButton
+          toggled={liked}
+          onToggle={handleLike}
+          onIcon={<HeartFillIcon />}
+          offIcon={<HeartIcon />}
+        />
+        <ToggleButton
+          toggled={bookmarked}
+          onToggle={handleBookmark}
+          onIcon={<BookmarkFillIcon />}
+          offIcon={<BookmarkIcon />}
+        />
       </div>
       <div className="px-4 py-1">
         <p className="text-sm font-bold mb-2">{`${likes?.length ?? 0} ${
