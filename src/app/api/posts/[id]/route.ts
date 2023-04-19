@@ -1,5 +1,5 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { getFollowingPostsOf, getPost } from "@/service/posts";
+import { getPost } from "@/service/posts";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 

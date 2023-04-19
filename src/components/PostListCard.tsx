@@ -1,7 +1,6 @@
 "use client";
 
 import { SimplePost } from "@/model/post";
-import Avatar from "./Avatar";
 import Image from "next/image";
 import CommentForm from "./CommentForm";
 import ActionBar from "./ActionBar";
