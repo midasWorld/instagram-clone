@@ -1,3 +1,4 @@
+import { follow } from "@/service/user";
 import { HomeUser } from "@/model/user";
 import { useCallback } from "react";
 import useSWR from "swr";
@@ -6,6 +7,13 @@ async function updateBookmark(postId: string, bookmark: boolean) {
   return fetch("/api/bookmarks", {
     method: "PUT",
     body: JSON.stringify({ id: postId, bookmark }),
+  }).then((res) => res.json());
+}
+
+async function updateFollow(targetId: string, follow: boolean) {
+  return fetch("/api/follow", {
+    method: "PUT",
+    body: JSON.stringify({ id: targetId, follow }),
   }).then((res) => res.json());
 }
 
@@ -33,5 +41,14 @@ export default function useMe() {
     [user, mutate]
   );
 
-  return { user, isLoading, error, setBookmark };
+  const toggleFollow = useCallback(
+    (targetId: string, follow: boolean) => {
+      return mutate(updateFollow(targetId, follow), {
+        populateCache: false,
+      });
+    },
+    [mutate]
+  );
+
+  return { user, isLoading, error, setBookmark, toggleFollow };
 }
