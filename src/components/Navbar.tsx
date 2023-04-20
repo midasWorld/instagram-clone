@@ -17,16 +17,19 @@ const menu = [
     href: "/",
     icon: <HomeIcon />,
     clickedIcon: <HomeFillIcon />,
+    title: "Home",
   },
   {
     href: "/search",
     icon: <SearchIcon />,
     clickedIcon: <SearchFillIcon />,
+    title: "Search users",
   },
   {
     href: "/new",
     icon: <NewIcon />,
     clickedIcon: <NewFillIcon />,
+    title: "New post",
   },
 ];
 
@@ -36,15 +39,15 @@ export default function Navbar() {
   const user = session?.user;
   return (
     <div className="flex justify-between items-center px-6">
-      <Link href="/">
+      <Link href="/" aria-label="Home">
         <h1 className="text-3xl font-bold">Instagram</h1>
       </Link>
       <nav>
         <ul className="flex items-center gap-4 p-4">
-          {menu.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href}>
-                {pathname === item.href ? item.clickedIcon : item.icon}
+          {menu.map(({ href, icon, clickedIcon, title }) => (
+            <li key={href}>
+              <Link href={href} aria-label={title}>
+                {pathname === href ? clickedIcon : icon}
               </Link>
             </li>
           ))}
