@@ -11,8 +11,6 @@ export async function POST(req: NextRequest) {
     return new Response("Authentication Error", { status: 401 });
   }
 
-  console.log(`user: ${JSON.stringify(user)}`);
-
   const { id, comment } = await req.json();
 
   if (!id || comment === undefined) {
