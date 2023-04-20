@@ -1,9 +1,9 @@
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { addComment } from "@/service/posts";
+import { follow, unfollow } from "@/service/user";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function PUT(req: NextRequest) {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
@@ -11,13 +11,15 @@ export async function POST(req: NextRequest) {
     return new Response("Authentication Error", { status: 401 });
   }
 
-  const { id, comment } = await req.json();
+  const { id: targetId, follow: isFollow } = await req.json();
 
-  if (!id || comment === undefined) {
+  if (!targetId || isFollow === undefined) {
     return new Response("Bad Request", { status: 400 });
   }
 
-  return addComment(id, user.id, comment) //
+  const request = isFollow ? follow : unfollow;
+
+  return request(user.id, targetId) //
     .then((res) => NextResponse.json(res))
     .catch((error) => new Response(JSON.stringify(error), { status: 500 }));
 }
