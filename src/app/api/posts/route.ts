@@ -1,4 +1,5 @@
 import { createPost, getFollowingPostsOf } from "@/service/posts";
+import { withResizedPngImage } from "@/util/image";
 import { withSessionUser } from "@/util/session";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -19,7 +20,9 @@ export async function POST(req: NextRequest) {
       return new Response("Bad Request", { status: 400 });
     }
 
-    return createPost(user.id, text, file) //
-      .then((data) => NextResponse.json(data));
+    return withResizedPngImage(file, async (resized) => {
+      return createPost(user.id, text, resized) //
+        .then((data) => NextResponse.json(data));
+    });
   });
 }
