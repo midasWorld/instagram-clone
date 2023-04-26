@@ -18,3 +18,8 @@ export type FullPost = {
   likes: string[];
   comments: Comment[];
 };
+
+export type PagePost = {
+  data: SimplePost[];
+  nextCursor: string;
+};

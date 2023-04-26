@@ -1,4 +1,4 @@
-import { FullPost, SimplePost } from "./../model/post";
+import { FullPost, PagePost, SimplePost } from "@/model/post";
 import { assetsURL, client, urlFor } from "./sanity";
 
 const simplePostProjection = `
@@ -21,6 +21,27 @@ export async function getFollowingPostsOf(username: string) {
       | order(_createdAt desc){${simplePostProjection}}`
     )
     .then(mapPosts);
+}
+
+export async function getFollowingPostsPageOf(
+  username: string,
+  lastCreatedAt: string,
+  limit: number
+): Promise<PagePost> {
+  return client
+    .fetch(
+      `*[_type == "post" && (author->username == "${username}"
+        || author._ref in *[_type == "user" && username == "${username}"].following[]._ref)
+      && dateTime(_createdAt) < dateTime("${lastCreatedAt}")]
+      | order(_createdAt desc)[0...${limit}]{${simplePostProjection}}`
+    )
+    .then(mapPosts)
+    .then((posts: SimplePost[]) => {
+      return {
+        data: posts,
+        nextCursor: posts[posts.length - 1]?.createdAt,
+      };
+    });
 }
 
 export async function getPost(id: string) {

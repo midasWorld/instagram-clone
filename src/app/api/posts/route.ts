@@ -1,11 +1,15 @@
-import { createPost, getFollowingPostsOf } from "@/service/posts";
+import { createPost, getFollowingPostsPageOf } from "@/service/posts";
 import { withResizedPngImage } from "@/util/image";
 import { withSessionUser } from "@/util/session";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   return withSessionUser(async (user) => {
-    return getFollowingPostsOf(user.username) //
+    const params = req.nextUrl.searchParams;
+    const limit = Number(params.get("limit") ?? "5");
+    const nextCursor = params.get("nextCursor") ?? "9999-12-30T23:59:59Z";
+
+    return getFollowingPostsPageOf(user.username, nextCursor, limit) //
       .then((data) => NextResponse.json(data));
   });
 }
