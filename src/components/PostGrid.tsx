@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 
 export default function PostGrid() {
-  const { posts, loading, isReachedEnd, setSize } = usePosts();
+  const { posts, isLoadingMore, isReachedEnd, setSize } = usePosts();
   const { ref, inView } = useInView({ threshold: 0.05 });
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function PostGrid() {
             </li>
           ))}
       </ul>
-      {loading && <GridSpinner />}
+      {isLoadingMore && <GridSpinner />}
     </div>
   );
 }

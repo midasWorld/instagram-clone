@@ -7,7 +7,7 @@ import PostListCard from "./PostListCard";
 import GridSpinner from "./ui/GridSpinner";
 
 export default function PostList() {
-  const { posts, loading, isReachedEnd, error, setSize } = usePosts();
+  const { posts, isLoadingMore, isReachedEnd, error, setSize } = usePosts();
   const { ref, inView } = useInView();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function PostList() {
           ))}
         </ul>
       )}
-      {loading && (
+      {isLoadingMore && (
         <div className="text-center mt-32">
           <GridSpinner color="red" />
         </div>

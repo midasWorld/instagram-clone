@@ -37,7 +37,7 @@ export default function usePosts() {
     setSize,
   } = useSWRInfinite<PagePost>(getKey, { revalidateFirstPage: false });
 
-  const loading =
+  const isLoadingMore =
     isLoading || (size > 0 && pages && typeof pages[size - 1] === "undefined");
 
   const isEmpty = pages?.[0]?.data.length === 0;
@@ -93,5 +93,13 @@ export default function usePosts() {
     ?.map((page) => page.data)
     .reduce((prev, cur) => prev.concat(cur), []);
 
-  return { posts, loading, isReachedEnd, error, setSize, setLike, postComment };
+  return {
+    posts,
+    isLoadingMore,
+    isReachedEnd,
+    error,
+    setSize,
+    setLike,
+    postComment,
+  };
 }
