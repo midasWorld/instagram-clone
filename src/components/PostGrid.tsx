@@ -5,19 +5,18 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 
 export default function PostGrid() {
-  const { posts, loading, setSize } = usePosts();
+  const { posts, isLoadingMore, isReachedEnd, setSize } = usePosts();
   const { ref, inView } = useInView({ threshold: 0.05 });
 
   useEffect(() => {
-    if (inView) {
+    if (inView && !isReachedEnd) {
       console.log(`✨ Get more movies (Infinite Scroll: ${inView})`);
       setSize((prev) => prev + 1);
     }
-  }, [inView, setSize]);
+  }, [inView, setSize, isReachedEnd]);
 
   return (
     <div className="w-full text-center">
-      {loading && <GridSpinner />}
       <ul className="grid grid-cols-3 gap-4 py-4 px-8">
         {posts &&
           posts.map((post, index) => (
@@ -26,6 +25,7 @@ export default function PostGrid() {
             </li>
           ))}
       </ul>
+      {isLoadingMore && <GridSpinner />}
     </div>
   );
 }

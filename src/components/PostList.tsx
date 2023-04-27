@@ -7,23 +7,18 @@ import PostListCard from "./PostListCard";
 import GridSpinner from "./ui/GridSpinner";
 
 export default function PostList() {
-  const { posts, loading, error, setSize } = usePosts();
+  const { posts, isLoadingMore, isReachedEnd, error, setSize } = usePosts();
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView) {
+    if (inView && !isReachedEnd) {
       console.log(`✨ Get more movies (Infinite Scroll: ${inView})`);
       setSize((prev) => prev + 1);
     }
-  }, [inView, setSize]);
+  }, [inView, setSize, isReachedEnd]);
 
   return (
     <section>
-      {loading && (
-        <div className="text-center mt-32">
-          <GridSpinner color="red" />
-        </div>
-      )}
       {posts && (
         <ul>
           {posts.map((post, index) => (
@@ -36,6 +31,11 @@ export default function PostList() {
             </li>
           ))}
         </ul>
+      )}
+      {isLoadingMore && (
+        <div className="text-center mt-32">
+          <GridSpinner color="red" />
+        </div>
       )}
     </section>
   );
