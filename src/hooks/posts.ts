@@ -17,26 +17,6 @@ async function addComment(id: string, comment: string) {
   }).then((res) => res.json());
 }
 
-export function usePostsPageOf(limit: number = 5) {
-  const cacheKeys = useCacheKeys();
-
-  const getKey = (pageIndex: any, previousPageData: PagePost) => {
-    if (previousPageData && !previousPageData.data) return null;
-    if (pageIndex === 0) return `${cacheKeys.postsKey}?limit=${limit}`;
-    if (previousPageData.nextCursor == null) return null;
-    return `${cacheKeys.postsKey}?nextCursor=${previousPageData.nextCursor}&limit=${limit}`;
-  };
-
-  const {
-    data: posts,
-    isLoading,
-    error,
-    setSize,
-  } = useSWRInfinite<PagePost>(getKey);
-
-  return { posts, isLoading, error, setSize };
-}
-
 export default function usePosts(limit: number = 5) {
   const cacheKeys = useCacheKeys();
 

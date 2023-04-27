@@ -61,40 +61,73 @@ export async function getPost(id: string) {
     .then((post: FullPost) => ({ ...post, image: urlFor(post.image) }));
 }
 
-export async function getPostsOf(username: string) {
+export async function getPostsOf(
+  username: string,
+  lastCreatedAt: string,
+  limit: number
+) {
   return client
     .fetch(
-      `*[_type == "post" && author->username =="${username}"]
-      | order(_createdAt desc) {
+      `*[_type == "post" && author->username =="${username}"
+      && dateTime(_createdAt) < dateTime("${lastCreatedAt}")]
+      | order(_createdAt desc)[0...${limit}] {
         ${simplePostProjection}
       }
     `
     )
-    .then(mapPosts);
+    .then(mapPosts)
+    .then((posts: SimplePost[]) => {
+      return {
+        data: posts,
+        nextCursor: posts[posts.length - 1]?.createdAt,
+      };
+    });
 }
 
-export async function getLikedPostsOf(username: string) {
+export async function getLikedPostsOf(
+  username: string,
+  lastCreatedAt: string,
+  limit: number
+) {
   return client
     .fetch(
-      `*[_type == "post" && "${username}" in likes[]->username]
-      | order(_createdAt desc) {
+      `*[_type == "post" && "${username}" in likes[]->username
+      && dateTime(_createdAt) < dateTime("${lastCreatedAt}")]
+      | order(_createdAt desc)[0...${limit}] {
         ${simplePostProjection}
       }
     `
     )
-    .then(mapPosts);
+    .then(mapPosts)
+    .then((posts: SimplePost[]) => {
+      return {
+        data: posts,
+        nextCursor: posts[posts.length - 1]?.createdAt,
+      };
+    });
 }
 
-export async function getSavedPostsOf(username: string) {
+export async function getSavedPostsOf(
+  username: string,
+  lastCreatedAt: string,
+  limit: number
+) {
   return client
     .fetch(
-      `*[_type == "post" && _id in *[_type == "user" && username == "${username}"].bookmarks[]._ref]
-      | order(_createdAt desc) {
+      `*[_type == "post" && _id in *[_type == "user" && username == "${username}"].bookmarks[]._ref
+      && dateTime(_createdAt) < dateTime("${lastCreatedAt}")]
+      | order(_createdAt desc)[0...${limit}] {
         ${simplePostProjection}
       }
     `
     )
-    .then(mapPosts);
+    .then(mapPosts)
+    .then((posts: SimplePost[]) => {
+      return {
+        data: posts,
+        nextCursor: posts[posts.length - 1]?.createdAt,
+      };
+    });
 }
 
 function mapPosts(posts: SimplePost[]) {
