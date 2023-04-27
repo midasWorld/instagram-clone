@@ -17,7 +17,6 @@ export default function PostGrid() {
 
   return (
     <div className="w-full text-center">
-      {loading && <GridSpinner />}
       <ul className="grid grid-cols-3 gap-4 py-4 px-8">
         {posts &&
           posts.map((post, index) => (
@@ -26,6 +25,7 @@ export default function PostGrid() {
             </li>
           ))}
       </ul>
+      {loading && <GridSpinner />}
     </div>
   );
 }
