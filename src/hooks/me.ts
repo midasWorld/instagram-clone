@@ -1,4 +1,3 @@
-import { follow } from "@/service/user";
 import { HomeUser } from "@/model/user";
 import { useCallback } from "react";
 import useSWR from "swr";
