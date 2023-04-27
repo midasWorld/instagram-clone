@@ -7,7 +7,7 @@ import PostListCard from "./PostListCard";
 import GridSpinner from "./ui/GridSpinner";
 
 export default function PostList() {
-  const { posts, isLoading: loading, error, setSize } = usePosts();
+  const { posts, loading, error, setSize } = usePosts();
   const { ref, inView } = useInView();
 
   useEffect(() => {

@@ -33,8 +33,12 @@ export default function usePosts() {
     isLoading,
     error,
     mutate,
+    size,
     setSize,
   } = useSWRInfinite<PagePost>(getKey, { revalidateFirstPage: false });
+
+  const loading =
+    isLoading || (size > 0 && pages && typeof pages[size - 1] === "undefined");
 
   const setLike = useCallback(
     (post: SimplePost, username: string, like: boolean) => {
@@ -84,5 +88,5 @@ export default function usePosts() {
     ?.map((page) => page.data)
     .reduce((prev, cur) => prev.concat(cur), []);
 
-  return { posts, isLoading, error, setSize, setLike, postComment };
+  return { posts, loading, error, setSize, setLike, postComment };
 }

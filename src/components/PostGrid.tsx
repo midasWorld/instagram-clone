@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 
 export default function PostGrid() {
-  const { posts, isLoading: loading, setSize } = usePosts();
+  const { posts, loading, setSize } = usePosts();
   const { ref, inView } = useInView({ threshold: 0.05 });
 
   useEffect(() => {
