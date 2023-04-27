@@ -7,15 +7,15 @@ import PostListCard from "./PostListCard";
 import GridSpinner from "./ui/GridSpinner";
 
 export default function PostList() {
-  const { posts, loading, error, setSize } = usePosts();
+  const { posts, loading, isReachedEnd, error, setSize } = usePosts();
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView) {
+    if (inView && !isReachedEnd) {
       console.log(`✨ Get more movies (Infinite Scroll: ${inView})`);
       setSize((prev) => prev + 1);
     }
-  }, [inView, setSize]);
+  }, [inView, setSize, isReachedEnd]);
 
   return (
     <section>

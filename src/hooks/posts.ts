@@ -40,6 +40,11 @@ export default function usePosts() {
   const loading =
     isLoading || (size > 0 && pages && typeof pages[size - 1] === "undefined");
 
+  const isEmpty = pages?.[0]?.data.length === 0;
+  const isReachedEnd =
+    isEmpty ||
+    (pages && pages.length > 0 && pages[pages.length - 1].nextCursor == null);
+
   const setLike = useCallback(
     (post: SimplePost, username: string, like: boolean) => {
       const newPost = {
@@ -88,5 +93,5 @@ export default function usePosts() {
     ?.map((page) => page.data)
     .reduce((prev, cur) => prev.concat(cur), []);
 
-  return { posts, loading, error, setSize, setLike, postComment };
+  return { posts, loading, isReachedEnd, error, setSize, setLike, postComment };
 }
